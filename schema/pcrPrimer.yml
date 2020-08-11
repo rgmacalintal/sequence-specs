@@ -1,0 +1,264 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+info:
+  description: PCR Primer schema corresponding to a sequence pcrprimer
+  version: "1.0.0"
+  title: PCR Primer schema
+  contact:
+    email: you@your-compay.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+paths:
+  /v1/pcrPrimer:
+    get:
+      summary: get pcrPrimer
+      operationId: getPcrPrimers
+      description: By passing in query string, user ca get available pcrPrimers authorised
+      parameters:
+        - in: query
+          name: filter[rsql]
+          description: pass a optional search string for looking up the pcrPrimers
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: optional sort string, can have sort order such as descending denoted by "-"
+          schema:
+            type: string
+        - in: query
+          name: page[offset]
+          description: number of records to skip when paging
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: page[limit]
+          description: maximum number of records to return when paging
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: pcrPrimers satifying the query restrictions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PcrPrimer'
+        '400':
+          description: bad input parameter
+        '404':
+          description: pcrPrimers not found
+    post:
+      summary: adds a pcrPrimer
+      operationId: addPcrPrimer
+      description: Adds a pcrPrimer
+      responses:
+        '201':
+          description: pcrPrimer created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: a pcrPrimer already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPcrPrimer'
+        description: pcrPrimer to add
+  /v1/pcrPrimer/{Id}:
+    get:
+      summary: Find pcrPrimer by ID
+      description: Returns a single pcrPrimer
+      operationId: getPcrPrimerById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of pcrPrimer to return
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PcrPrimer'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: pcrPrimer not found
+    patch:
+      summary: update a pcrPrimer
+      operationId: updatePcrPrimer
+      description: update a pcrPrimer
+      parameters:
+        - name: Id
+          in: path
+          description: pcrPrimer id to patch
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: pcrPrimer updated
+        '400':
+          description: 'invalid input, object invalid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PcrPrimer'
+        description: pcrPrimer to update
+    delete:
+      summary: delete a pcrPrimer
+      operationId: deletePcrPrimer
+      description: delete a pcrPrimer
+      parameters:
+        - name: Id
+          in: path
+          description: pcrPrimer id to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: pcrPrimer marked as deleted
+        '400':
+          description: invalid ID supplied
+        '404':
+          description: pcrPrimer not found
+
+components:
+  schemas:
+    PcrPrimer:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+          allOf:
+           - $ref: '#/components/schemas/CommonPcrPrimer'
+           
+    NewPcrPrimer:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+           - $ref: '#/components/schemas/CommonPcrPrimer'
+                      
+    CommonPcrPrimer:
+      type: object
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          enum: [pcrPrimer]      
+          description: The type of data being returned.
+        attributes:
+          description: Schema representing the PcrPrimer
+          type: object
+          required:
+            - name
+            - type
+            - seq
+            - lotNumber
+          properties:
+            name:
+              type: string
+            type:
+              enum:
+                - PRIMER
+                - MID
+                - FUSION_PRIMER
+                - ILLUMINA_INDEX
+                - ITRU_PRIMER
+              description: Primer types
+            seq:
+              type: string
+              description: A short DNA sequence string
+            version:
+              type: integer
+            direction:
+              type: string 
+              description: A primer direction such as forward or reverse
+            tmCalculated:
+              type: string 
+            tmPe:
+              type: integer
+            position:
+              type: string
+            storage:
+              type: string
+            restrictionSite:
+              type: string
+            used4sequencing:
+              type: boolean
+            used4qrtpcr:
+              type: boolean
+            used4nestedPcr:
+              type: boolean
+            used4genotyping:
+              type: boolean
+            used4cloning:
+              type: boolean
+            used4stdPcr:
+              type: boolean
+            referenceSeqDir:
+              type: string
+            referenceSeqFile:
+              type: string
+            urllink:
+              type: string
+            note:
+              type: string
+            lastModified:
+              type: string
+            application:
+              type: string
+            reference:
+              type: string
+            targetSpecies:
+              type: string
+            supplier:
+              type: string
+            dateOrdered:
+              type: string
+            purification:
+              type: string
+            designedBy:
+              type: string
+            stockConcentration:
+              type: string
+            region:
+              type: string
+              format: uuid              
+
+
+
+
+
+
+
+
+
+
+
