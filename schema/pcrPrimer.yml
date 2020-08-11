@@ -195,6 +195,8 @@ components:
             seq:
               type: string
               description: A short DNA sequence string
+            lotNumber:
+              type: integer
             version:
               type: integer
             direction:
