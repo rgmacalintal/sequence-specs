@@ -251,8 +251,8 @@ components:
             stockConcentration:
               type: string
             region:
-              type: string
-              format: uuid              
+              oneOf: 
+                - $ref: region.yml#/components/schemas/Region
 
 
 
