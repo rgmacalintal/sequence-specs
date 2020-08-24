@@ -188,4 +188,20 @@ components:
               description: region symbol
             description:
               type: string
-              description: region description              
+              description: region description  
+    LinkedRegion:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+            - type
+          properties:
+            id:
+              type: string
+            type:
+              enum: [region]
+

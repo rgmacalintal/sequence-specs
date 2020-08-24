@@ -250,9 +250,13 @@ components:
               type: string
             stockConcentration:
               type: string
+        relationships:
+          type: object
+          required: 
+            - region
+          properties:
             region:
-              oneOf: 
-                - $ref: region.yml#/components/schemas/Region
+              $ref: region.yml#/components/schemas/LinkedRegion
 
 
 
