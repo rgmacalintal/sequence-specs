@@ -171,7 +171,7 @@ components:
         - attributes
       properties:
         type:
-          enum: [pcrPrimer]      
+          enum: [pcr-primer]      
           description: The type of data being returned.
         attributes:
           description: Schema representing the PcrPrimer
