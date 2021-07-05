@@ -13,9 +13,9 @@ info:
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 
 paths:
-  /v1/pcrPrimer:
+  /v1/pcr-primer:
     get:
-      summary: get pcrPrimer
+      summary: get pcr-primer
       operationId: getPcrPrimers
       description: By passing in query string, user ca get available pcrPrimers authorised
       parameters:
@@ -57,31 +57,31 @@ paths:
         '404':
           description: pcrPrimers not found
     post:
-      summary: adds a pcrPrimer
+      summary: adds a pcr-primer
       operationId: addPcrPrimer
-      description: Adds a pcrPrimer
+      description: Adds a pcr-primer
       responses:
         '201':
-          description: pcrPrimer created
+          description: pcr-primer created
         '400':
           description: 'invalid input, object invalid'
         '409':
-          description: a pcrPrimer already exists
+          description: a pcr-primer already exists
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/NewPcrPrimer'
-        description: pcrPrimer to add
-  /v1/pcrPrimer/{Id}:
+        description: pcr-primer to add
+  /v1/pcr-primer/{Id}:
     get:
-      summary: Find pcrPrimer by ID
-      description: Returns a single pcrPrimer
+      summary: Find pcr-primer by ID
+      description: Returns a single pcr-primer
       operationId: getPcrPrimerById
       parameters:
         - name: Id
           in: path
-          description: ID of pcrPrimer to return
+          description: ID of pcr-primer to return
           required: true
           schema:
             type: integer
@@ -95,21 +95,21 @@ paths:
         "400":
           description: Invalid ID supplied
         "404":
-          description: pcrPrimer not found
+          description: pcr-primer not found
     patch:
-      summary: update a pcrPrimer
+      summary: update a pcr-primer
       operationId: updatePcrPrimer
-      description: update a pcrPrimer
+      description: update a pcr-primer
       parameters:
         - name: Id
           in: path
-          description: pcrPrimer id to patch
+          description: pcr-primer id to patch
           required: true
           schema:
             type: integer
       responses:
         '200':
-          description: pcrPrimer updated
+          description: pcr-primer updated
         '400':
           description: 'invalid input, object invalid'
       requestBody:
@@ -117,25 +117,25 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PcrPrimer'
-        description: pcrPrimer to update
+        description: pcr-primer to update
     delete:
-      summary: delete a pcrPrimer
+      summary: delete a pcr-primer
       operationId: deletePcrPrimer
-      description: delete a pcrPrimer
+      description: delete a pcr-primer
       parameters:
         - name: Id
           in: path
-          description: pcrPrimer id to delete
+          description: pcr-primer id to delete
           required: true
           schema:
             type: integer
       responses:
         '200':
-          description: pcrPrimer marked as deleted
+          description: pcr-primer marked as deleted
         '400':
           description: invalid ID supplied
         '404':
-          description: pcrPrimer not found
+          description: pcr-primer not found
 
 components:
   schemas:
