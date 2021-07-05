@@ -18,7 +18,7 @@ paths:
   /v1/region/{Id}:
     $ref: 'region.yml#/paths/~1v1~1region~1{Id}'  
   /v1/pcr-primer:
-    $ref: 'pcrPrimer.yml#/paths/~1v1~1pcrPrimer'    
+    $ref: 'pcrPrimer.yml#/paths/~1v1~1pcr-primer'    
   /v1/pcr-primer/{Id}:
-    $ref: 'pcrPrimer.yml#/paths/~1v1~1pcrPrimer~1{Id}'
+    $ref: 'pcrPrimer.yml#/paths/~1v1~1pcr-primer~1{Id}'
 
