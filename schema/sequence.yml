@@ -1,0 +1,24 @@
+openapi: 3.0.0
+servers:
+  - description: DINA - AAFC
+    url: https://virtserver.dina-aafc.com/AAFC/1.0.0
+info:
+  description: SeqDB API Schema
+  version: "1.0.0"
+  title: SeqDB API Schema
+  contact:
+    email: dina-aafc@canada.ca
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+   
+paths:
+  /v1/region:
+    $ref: 'region.yml#/paths/~1v1~1region'
+  /v1/region/{Id}:
+    $ref: 'region.yml#/paths/~1v1~1region~1{Id}'  
+  /v1/pcr-primer:
+    $ref: 'pcrPrimer.yml#/paths/~1v1~1pcr-primer'    
+  /v1/pcr-primer/{Id}:
+    $ref: 'pcrPrimer.yml#/paths/~1v1~1pcr-primer~1{Id}'
+

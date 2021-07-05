@@ -1,0 +1,207 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+info:
+  description: Region schema
+  version: "1.0.0"
+  title: Region schema
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+paths:
+  /v1/region:
+    get:
+      summary: get region
+      operationId: getRegion
+      description: By passing in query string, user can get available regions authorised
+      parameters:
+        - in: query
+          name: filter[rsql]
+          description: pass an optional search string for looking up the regions
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: optional sort string, can have sort order such as descending denoted by "-"
+          schema:
+            type: string
+        - in: query
+          name: page[offset]
+          description: number of records to skip when paging
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: page[limit]
+          description: maximum number of records to return when paging
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: regions satifying the query restrictions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Region'
+        '400':
+          description: bad input parameter
+        '404':
+          description: regions not found
+    post:
+      summary: adds a region
+      operationId: addRegion
+      description: Adds a region
+      responses:
+        '201':
+          description: region created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: A region already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewRegion'
+        description: region to add
+  /v1/region/{Id}:
+    get:
+      summary: Find region by ID
+      description: Returns a single region
+      operationId: getRegionById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of region to return
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Region'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: region not found
+    patch:
+      summary: update a region
+      operationId: updateRegion
+      description: update a region
+      parameters:
+        - name: Id
+          in: path
+          description: region id to patch
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: region updated
+        '400':
+          description: 'invalid input, object invalid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Region'
+        description: region to update
+    delete:
+      summary: delete a region
+      operationId: deleteRegion
+      description: delete a region
+      parameters:
+        - name: Id
+          in: path
+          description: region id to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: region marked as deleted
+        '400':
+          description: invalid ID supplied
+        '404':
+          description: region not found
+
+components:
+  schemas:
+    Region:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+          allOf:
+           - $ref: '#/components/schemas/CommonRegion'
+           
+    NewRegion:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+           - $ref: '#/components/schemas/CommonRegion'
+                      
+    CommonRegion:
+      type: object
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          enum: [region]      
+          description: The type of data being returned.
+        attributes:
+          description: Schema representing the region associated a Pcr Primer
+          type: object
+          required:
+            - name
+            - symbol
+          properties:
+            name:
+              type: string
+              description: region name
+            symbol:
+              type: string
+              description: region symbol
+            description:
+              type: string
+              description: region description  
+    LinkedRegion:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+            - type
+          properties:
+            id:
+              type: string
+            type:
+              enum: [region]
+
