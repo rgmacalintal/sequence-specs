@@ -21,4 +21,7 @@ paths:
     $ref: 'pcrPrimer.yml#/paths/~1v1~1pcr-primer'    
   /v1/pcr-primer/{Id}:
     $ref: 'pcrPrimer.yml#/paths/~1v1~1pcr-primer~1{Id}'
-
+  /v1/pcr-batch:
+    $ref: 'pcrBatch.yml#/paths/~1v1~1pcr-batch'
+  /v1/pcr-batch/{Id}:
+    $ref: 'pcrBatch.yml#/paths/~1v1~1pcr-batch~1{Id}'

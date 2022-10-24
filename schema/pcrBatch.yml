@@ -1,0 +1,251 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+info:
+  description: PCR Batch schema
+  version: "1.0.0"
+  title: PCR Batch schema
+  contact:
+    email: you@your-compay.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+paths:
+  /v1/pcr-batch:
+    get:
+      tags:
+        - PCR Batch
+      summary: get pcr-batch
+      operationId: getPcrBatches
+      description: By passing in query string, get available pcrBatches authorised
+      parameters:
+        - in: query
+          name: filter[rsql]
+          description: pass a optional search string for looking up the pcrBatches
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: optional sort string, can have sort order such as descending denoted by "-"
+          schema:
+            type: string
+        - in: query
+          name: page[offset]
+          description: number of records to skip when paging
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: page[limit]
+          description: maximum number of records to return when paging
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: pcrBatches satisfying the query restrictions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PcrBatch'
+        '400':
+          description: bad input parameter
+        '404':
+          description: pcrBatch not found
+    post:
+      tags:
+        - PCR Batch
+      summary: adds a pcr-batch
+      operationId: addPcrBatch
+      description: Adds a pcr-batch
+      responses:
+        '201':
+          description: pcr-batch created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: a pcr-batch already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPcrBatch'
+        description: pcr-batch to add
+  /v1/pcr-batch/{Id}:
+    get:
+      tags:
+        - PCR Batch
+      summary: Find pcr-batch by ID
+      description: Returns a single pcr-batch
+      operationId: getPcrBatchById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of pcr-batch to return
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PcrBatch'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: pcr-batch not found
+    patch:
+      tags:
+        - PCR Batch
+      summary: update a pcr-batch
+      operationId: updatePcrBatch
+      description: update a pcr-batch
+      parameters:
+        - name: Id
+          in: path
+          description: pcr-batch id to patch
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: pcr-batch updated
+        '400':
+          description: 'invalid input, object invalid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PcrBatch'
+        description: pcr-batch to update
+    delete:
+      tags:
+        - PCR Batch
+      summary: delete a pcr-batch
+      operationId: deletePcrBatch
+      description: delete a pcr-batch
+      parameters:
+        - name: Id
+          in: path
+          description: pcr-batch id to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: pcr-batch marked as deleted
+        '400':
+          description: invalid ID supplied
+        '404':
+          description: pcr-batch not found
+
+components:
+  schemas:
+    PcrBatch:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+          allOf:
+           - $ref: '#/components/schemas/CommonPcrBatch'
+           
+    NewPcrBatch:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+           - $ref: '#/components/schemas/CommonPcrBatch'
+                      
+    CommonPcrBatch:
+      type: object
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          enum: [pcr-batch]
+          description: The type of data being returned.
+        attributes:
+          description: Schema representing the PcrBatch
+          type: object
+          required:
+            - name
+            - type
+          properties:
+            createdBy:
+              type: string      
+              readOnly: true
+              description: authenticated user who created the pcr-batch
+            createdOn:              
+              type: string
+              format: date-time                            
+              readOnly: true
+              description: date and time when the pcr-batch was created in ISO format
+              example: 1985-04-12T23:20:50.52Z
+            group:
+              type: string
+              nullable: true
+              description: The group in which the pcr-batch belongs to
+            name:
+              type: string
+        relationships:
+          type: object
+          required: 
+            - region
+          properties:
+            primerForward:
+              type: object
+              nullable: true
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [pcr-primer]
+                    id:
+                      type: string
+                      format: uuid
+                      description: Forward PCR Primer id
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+            primerReverse:
+              type: object
+              nullable: true
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [pcr-primer]
+                    id:
+                      type: string
+                      format: uuid
+                      description: Reverse PCR Primer id
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
