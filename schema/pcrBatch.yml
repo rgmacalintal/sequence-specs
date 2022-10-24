@@ -188,7 +188,6 @@ components:
           type: object
           required:
             - name
-            - type
           properties:
             createdBy:
               type: string      
