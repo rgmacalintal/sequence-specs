@@ -207,8 +207,6 @@ components:
               type: string
         relationships:
           type: object
-          required: 
-            - region
           properties:
             primerForward:
               type: object
