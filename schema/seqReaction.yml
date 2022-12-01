@@ -176,9 +176,6 @@ components:
         attributes:
           description: Schema representing the region associated a Sequence Reaction
           type: object
-          required:
-            - name
-            - symbol
           properties:
             createdBy:
               type: string      
