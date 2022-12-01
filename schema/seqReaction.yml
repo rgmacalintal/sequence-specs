@@ -21,7 +21,7 @@ paths:
       parameters:
         - in: query
           name: filter[rsql]
-          description: pass an optional search string for looking up the regions
+          description: pass an optional search string for looking up the seq-reaction
           schema:
             type: string
         - in: query
@@ -45,17 +45,17 @@ paths:
             maximum: 50
       responses:
         '200':
-          description: regions satifying the query restrictions
+          description: seq-reaction satifying the query restrictions
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Region'
+                  $ref: '#/components/schemas/SeqReaction'
         '400':
           description: bad input parameter
         '404':
-          description: regions not found
+          description: seq-reaction not found
     post:
       summary: adds a seq-reaction
       operationId: addSeqReaction
@@ -81,7 +81,7 @@ paths:
       parameters:
         - name: Id
           in: path
-          description: ID of region to return
+          description: ID of seq-reaction to return
           required: true
           schema:
             type: integer
