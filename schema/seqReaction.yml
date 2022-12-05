@@ -1,0 +1,254 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+info:
+  description: Sequence Reaction schema
+  version: "1.0.0"
+  title: SeqReaction schema
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+paths:
+  /v1/seq-reaction:
+    get:
+      summary: get seq-reaction
+      operationId: getSeqReaction
+      description: By passing in query string, user can get available seq-reaction authorised
+      parameters:
+        - in: query
+          name: filter[rsql]
+          description: pass an optional search string for looking up the seq-reaction
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: optional sort string, can have sort order such as descending denoted by "-"
+          schema:
+            type: string
+        - in: query
+          name: page[offset]
+          description: number of records to skip when paging
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: page[limit]
+          description: maximum number of records to return when paging
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: seq-reaction satifying the query restrictions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SeqReaction'
+        '400':
+          description: bad input parameter
+        '404':
+          description: seq-reaction not found
+    post:
+      summary: adds a seq-reaction
+      operationId: addSeqReaction
+      description: Adds a seq-reaction
+      responses:
+        '201':
+          description: seq-reaction created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: A seq-reaction already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewSeqReaction'
+        description: seq-reaction to add
+  /v1/seq-reaction/{Id}:
+    get:
+      summary: Find seq-reaction by ID
+      description: Returns a single seq-reaction
+      operationId: getSeqReactionById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of seq-reaction to return
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeqReaction'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: seq-reaction not found
+    patch:
+      summary: update a seq-reaction
+      operationId: updateSeqReaction
+      description: update a seq-reaction
+      parameters:
+        - name: Id
+          in: path
+          description: seq-reaction id to patch
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: seq-reaction updated
+        '400':
+          description: 'invalid input, object invalid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SeqReaction'
+        description: seq-reaction to update
+    delete:
+      summary: delete a seq-reaction
+      operationId: deleteSeqReaction
+      description: delete a seq-reaction
+      parameters:
+        - name: Id
+          in: path
+          description: seq-reaction id to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: seq-reaction marked as deleted
+        '400':
+          description: invalid ID supplied
+        '404':
+          description: seq-reaction not found
+
+components:
+  schemas:
+    SeqReaction:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+          allOf:
+           - $ref: '#/components/schemas/CommonSeqReaction'
+           
+    NewSeqReaction:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+           - $ref: '#/components/schemas/CommonSeqReaction'
+                      
+    CommonSeqReaction:
+      type: object
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          enum: [seq-reaction]      
+          description: The type of data being returned.
+        attributes:
+          description: Schema representing the region associated a Sequence Reaction
+          type: object
+          properties:
+            createdBy:
+              type: string      
+              readOnly: true
+              description: authenticated user who created the seq-reaction
+            createdOn:              
+              type: string
+              format: date-time                            
+              readOnly: true
+              description: date and time when the seq-reaction was created in ISO format
+              example: 1985-04-12T23:20:50.52Z
+            group:
+              type: string
+              nullable: true
+              description: The group in which the seq-reaction belongs to
+        relationships:
+          type: object
+          properties:
+            seqBatch:
+              type: object
+              nullable: true
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [seq-batch]
+                    id:
+                      type: string
+                      format: uuid
+                      description: SeqBatch id
+                      example: 99e59304-b63d-42d8-ba03-4c1d415f5d5a
+            pcrBatchItem:
+              type: object
+              nullable: true
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [pcr-batch-item]
+                    id:
+                      type: string
+                      format: uuid
+                      description: PcrBatchItem id
+                      example: 4ed50a6e-0405-4c5f-99b6-7ec90820404f
+            seqPrimer:
+              type: object
+              nullable: true
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [pcr-primer]
+                    id:
+                      type: string
+                      format: uuid
+                      description: PcrBatchItem id
+                      example: 28c5bce6-dde7-449f-bafd-120b714be43f
+
