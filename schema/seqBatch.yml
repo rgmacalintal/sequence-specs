@@ -1,0 +1,290 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+info:
+  description: Sequence Batch schema
+  version: "1.0.0"
+  title: Sequence Batch schema
+  contact:
+    email: you@your-compay.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+paths:
+  /v1/seq-batch:
+    get:
+      tags:
+        - Sequence Batch
+      summary: get seq-batch
+      operationId: getSeqBatches
+      description: By passing in query string, get available seqBatches authorised
+      parameters:
+        - in: query
+          name: filter[rsql]
+          description: pass a optional search string for looking up the seqBatches
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: optional sort string, can have sort order such as descending denoted by "-"
+          schema:
+            type: string
+        - in: query
+          name: page[offset]
+          description: number of records to skip when paging
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: page[limit]
+          description: maximum number of records to return when paging
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: seqBatches satisfying the query restrictions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SeqBatch'
+        '400':
+          description: bad input parameter
+        '404':
+          description: seqBatch not found
+    post:
+      tags:
+        - Sequence Batch
+      summary: adds a seq-batch
+      operationId: addSeqBatch
+      description: Adds a seq-batch
+      responses:
+        '201':
+          description: seq-batch created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: a seq-batch already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewSeqBatch'
+        description: seq-batch to add
+  /v1/seq-batch/{Id}:
+    get:
+      tags:
+        - Sequence Batch
+      summary: Find seq-batch by ID
+      description: Returns a single seq-batch
+      operationId: getSeqBatchById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of seq-batch to return
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeqBatch'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: seq-batch not found
+    patch:
+      tags:
+        - Sequence Batch
+      summary: update a seq-batch
+      operationId: updateSeqBatch
+      description: update a seq-batch
+      parameters:
+        - name: Id
+          in: path
+          description: seq-batch id to patch
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: seq-batch updated
+        '400':
+          description: 'invalid input, object invalid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SeqBatch'
+        description: seq-batch to update
+    delete:
+      tags:
+        - Sequence Batch
+      summary: delete a seq-batch
+      operationId: deleteSeqBatch
+      description: delete a seq-batch
+      parameters:
+        - name: Id
+          in: path
+          description: seq-batch id to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: seq-batch marked as deleted
+        '400':
+          description: invalid ID supplied
+        '404':
+          description: seq-batch not found
+
+components:
+  schemas:
+    SeqBatch:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+          allOf:
+           - $ref: '#/components/schemas/CommonSeqBatch'
+           
+    NewSeqBatch:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+           - $ref: '#/components/schemas/CommonSeqBatch'
+                      
+    CommonSeqBatch:
+      type: object
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          enum: [seq-batch]
+          description: The type of data being returned.
+        attributes:
+          description: Schema representing the SeqBatch
+          type: object
+          required:
+            - name
+          properties:
+            createdBy:
+              type: string      
+              readOnly: true
+              description: authenticated user who created the seq-batch
+            createdOn:              
+              type: string
+              format: date-time                            
+              readOnly: true
+              description: date and time when the seq-batch was created in ISO format
+              example: 1985-04-12T23:20:50.52Z
+            group:
+              type: string
+              nullable: true
+              description: The group in which the seq-batch belongs to
+            name:
+              type: string
+            reactionDate:
+              type: date
+        relationships:
+          type: object
+          properties:
+            experimenters:
+              type: array
+                items:
+                  type: object
+                  nullable: true
+                  required:
+                    - data
+                  properties:
+                    data:
+                      type: object
+                      required:
+                        - type
+                        - id
+                      properties:
+                        type:
+                          enum: [person]
+                        id:
+                          type: string
+                          format: uuid
+                          description: Person id
+                          example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+            protocol:
+              type: object
+              nullable: true
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [protocol]
+                    id:
+                      type: string
+                      format: uuid
+                      description: Protocol id
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+            region:
+              type: object
+              nullable: true
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [region]
+                    id:
+                      type: string
+                      format: uuid
+                      description: Region id
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+            thermocyclerProfile:
+              type: object
+              nullable: true
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [thermocycler-profile]
+                    id:
+                      type: string
+                      format: uuid
+                      description: thermocycler profile id
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
