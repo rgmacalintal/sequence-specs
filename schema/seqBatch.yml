@@ -212,25 +212,25 @@ components:
           properties:
             experimenters:
               type: array
-                items:
-                  type: object
-                  nullable: true
-                  required:
-                    - data
-                  properties:
-                    data:
-                      type: object
-                      required:
-                        - type
-                        - id
-                      properties:
-                        type:
-                          enum: [person]
-                        id:
-                          type: string
-                          format: uuid
-                          description: Person id
-                          example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+              items:
+                type: object
+                nullable: true
+                required:
+                  - data
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - type
+                      - id
+                    properties:
+                      type:
+                        enum: [person]
+                      id:
+                        type: string
+                        format: uuid
+                        description: Person id
+                        example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
             protocol:
               type: object
               nullable: true
