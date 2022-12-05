@@ -195,7 +195,7 @@ components:
               description: authenticated user who created the seq-batch
             createdOn:              
               type: string
-              format: date-time                            
+              format: date-time
               readOnly: true
               description: date and time when the seq-batch was created in ISO format
               example: 1985-04-12T23:20:50.52Z
@@ -206,7 +206,8 @@ components:
             name:
               type: string
             reactionDate:
-              type: date
+              type: string
+              format: date
         relationships:
           type: object
           properties:
