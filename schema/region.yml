@@ -15,6 +15,8 @@ info:
 paths:
   /v1/region:
     get:
+      tags:
+        - Region
       summary: get region
       operationId: getRegion
       description: By passing in query string, user can get available regions authorised
@@ -57,6 +59,8 @@ paths:
         '404':
           description: regions not found
     post:
+      tags:
+        - Region
       summary: adds a region
       operationId: addRegion
       description: Adds a region
@@ -75,6 +79,8 @@ paths:
         description: region to add
   /v1/region/{Id}:
     get:
+      tags:
+        - Region
       summary: Find region by ID
       description: Returns a single region
       operationId: getRegionById
@@ -97,6 +103,8 @@ paths:
         "404":
           description: region not found
     patch:
+      tags:
+        - Region
       summary: update a region
       operationId: updateRegion
       description: update a region
@@ -119,6 +127,8 @@ paths:
               $ref: '#/components/schemas/Region'
         description: region to update
     delete:
+      tags:
+        - Region
       summary: delete a region
       operationId: deleteRegion
       description: delete a region
