@@ -194,6 +194,20 @@ components:
               readOnly: true
               description: date and time when the Sequencing Facility record was created in ISO format
               example: 1985-04-12T23:20:50.52Z
+            contacts:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  roles:
+                    type: array
+                    items:
+                      properties:
+                        type: string
+                  info:
+                    type: string
             shippingAddress:
               type: object
               properties:
