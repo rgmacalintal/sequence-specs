@@ -204,8 +204,7 @@ components:
                   roles:
                     type: array
                     items:
-                      properties:
-                        type: string
+                      type: string
                   info:
                     type: string
             shippingAddress:
