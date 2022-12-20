@@ -33,3 +33,7 @@ paths:
     $ref: 'seqReaction.yml#/paths/~1v1~1seq-reaction'
   /v1/seq-reaction/{Id}:
     $ref: 'seqReaction.yml#/paths/~1v1~1seq-reaction~1{Id}'
+  /v1/sequencing-facility:
+    $ref: 'sequencingFacility.yml#/paths/~1v1~1sequencing-facility'
+  /v1/sequencing-facility/{Id}:
+    $ref: 'sequencingFacility.yml#/paths/~1v1~1sequencing-facility~1{Id}'

@@ -1,0 +1,234 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+info:
+  description: Sequencing Facility schema
+  version: "1.0.0"
+  title: Sequencing Facility schema
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+paths:
+  /v1/sequencing-facility:
+    get:
+      tags:
+        - Sequencing Facility
+      summary: get sequencing-facility
+      operationId: getSequencingFacility
+      description: By passing in query string, user can get available sequencing-facility authorised
+      parameters:
+        - in: query
+          name: filter[rsql]
+          description: pass an optional search string for looking up the sequencing-facility
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: optional sort string, can have sort order such as descending denoted by "-"
+          schema:
+            type: string
+        - in: query
+          name: page[offset]
+          description: number of records to skip when paging
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: page[limit]
+          description: maximum number of records to return when paging
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: sequencing-facility satisfying the query restrictions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SequencingFacility'
+        '400':
+          description: bad input parameter
+        '404':
+          description: sequencing-facility not found
+    post:
+      tags:
+        - Sequencing Facility
+      summary: adds a sequencing-facility
+      operationId: addSequencingFacility
+      description: Adds a sequencing-facility
+      responses:
+        '201':
+          description: sequencing-facility created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: A sequencing-facility already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewSequencingFacility'
+        description: sequencing-facility to add
+  /v1/sequencing-facility/{Id}:
+    get:
+      tags:
+        - Sequencing Facility
+      summary: Find sequencing-facility by ID
+      description: Returns a single sequencing-facility
+      operationId: getSequencingFacilityById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of sequencing-facility to return
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SequencingFacility'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: sequencing-facility not found
+    patch:
+      tags:
+        - Sequencing Facility
+      summary: Update a sequencing-facility
+      operationId: updateSequencingFacility
+      description: update a sequencing-facility
+      parameters:
+        - name: Id
+          in: path
+          description: sequencing-facility id to patch
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: sequencing-facility updated
+        '400':
+          description: 'invalid input, object invalid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SequencingFacility'
+        description: sequencing-facility to update
+    delete:
+      tags:
+        - Sequencing Facility
+      summary: delete a sequencing-facility
+      operationId: deleteSequencingFacility
+      description: delete a sequencing-facility
+      parameters:
+        - name: Id
+          in: path
+          description: sequencing-facility id to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: sequencing-facility deleted
+        '400':
+          description: invalid ID supplied
+        '404':
+          description: sequencing-facility not found
+
+components:
+  schemas:
+    SequencingFacility:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+          allOf:
+           - $ref: '#/components/schemas/CommonSequencingFacility'
+           
+    NewSequencingFacility:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+           - $ref: '#/components/schemas/CommonSequencingFacility'
+                      
+    CommonSequencingFacility:
+      type: object
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          enum: [sequencing-facility]
+          description: The type of data being returned.
+        attributes:
+          description: Schema representing a Sequencing Facility
+          type: object
+          properties:
+            name:
+              type: string
+              description: The name of the Sequencing Facility
+            group:
+              type: string
+              nullable: true
+              description: The group in which the Sequencing Facility belongs to
+            createdBy:
+              type: string      
+              readOnly: true
+              description: authenticated user who created the Sequencing Facility
+            createdOn:              
+              type: string
+              format: date-time                            
+              readOnly: true
+              description: date and time when the Sequencing Facility record was created in ISO format
+              example: 1985-04-12T23:20:50.52Z
+            contacts:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  roles:
+                    type: array
+                    items:
+                      type: string
+                  info:
+                    type: string
+            shippingAddress:
+              type: object
+              properties:
+                addressLine1:
+                  type: string
+                addressLine2:
+                  type: string
+                city:
+                  type: string
+                provinceState:
+                  type: string
+                zipCode:
+                  type: string
+                country:
+                  type: string
