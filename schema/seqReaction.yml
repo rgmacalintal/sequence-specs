@@ -201,6 +201,16 @@ components:
               type: string
               nullable: true
               description: The group in which the seq-reaction belongs to
+            wellColumn:
+              type: integer
+              minimum: 1
+              maximum: 255
+              nullable: true
+              description: An integer representing the column. Starting at 1.
+            wellRow:
+              type: string
+              nullable: true
+              description: A letter representing the row.
         relationships:
           type: object
           properties:
