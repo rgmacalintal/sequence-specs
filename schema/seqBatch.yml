@@ -208,6 +208,18 @@ components:
             reactionDate:
               type: string
               format: date
+            storageRestriction:
+              type: object
+              properties:
+                layout:
+                  type: object
+                  properties:
+                    numberOfRows:
+                      type: integer
+                    numberOfColumns:
+                      type: integer
+                    fillDirection:
+                      enum: [BY_ROW, BY_COLUMN]
         relationships:
           type: object
           properties:
@@ -289,3 +301,42 @@ components:
                       format: uuid
                       description: thermocycler profile id
                       example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+            storageUnit:
+              type: object
+              nullable: true
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [storage-unit]
+                    id:
+                      type: string
+                      format: uuid
+                      description: storageUnit id
+                      example: f6244d2a-68bd-4990-bdbb-96b425d6c703
+            storageUnitType:
+              type: object
+              description: storageUnitType if no concrete storageUnit is used
+              nullable: true
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [storage-unit-type]
+                    id:
+                      type: string
+                      format: uuid
+                      description: storageUnitType id
+                      example: 7440b433-bb1e-41f5-8281-6c5bfe4cf260
