@@ -246,3 +246,23 @@ components:
                       format: uuid
                       description: Reverse PCR Primer id
                       example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+            protocol:
+              type: object
+              nullable: true
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [protocol]
+                    id:
+                      type: string
+                      format: uuid
+                      description: Id of the PCR Batch protocol
+                      example: 953f128f-e64c-470b-99d4-cad9c4802715
+                      
