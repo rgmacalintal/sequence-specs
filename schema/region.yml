@@ -212,7 +212,9 @@ components:
               description: region symbol
             description:
               type: string
-              description: region description  
+              description: region description
+            applicableOrganisms:
+              type: string
     LinkedRegion:
       type: object
       required:
