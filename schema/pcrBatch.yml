@@ -205,6 +205,9 @@ components:
               description: The group in which the pcr-batch belongs to
             name:
               type: string
+            isComplete:
+              type: boolean
+              description: Is the PCRBatch complete? Complete PCRBatches can't be modified.
         relationships:
           type: object
           properties:
