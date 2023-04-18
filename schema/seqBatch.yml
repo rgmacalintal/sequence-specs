@@ -188,6 +188,7 @@ components:
           type: object
           required:
             - name
+            - sequencingType
           properties:
             createdBy:
               type: string      
@@ -204,6 +205,8 @@ components:
               nullable: true
               description: The group in which the seq-batch belongs to
             name:
+              type: string
+            sequencingType:
               type: string
             reactionDate:
               type: string
