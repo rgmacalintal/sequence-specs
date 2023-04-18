@@ -208,9 +208,14 @@ components:
               type: string
             sequencingType:
               type: string
+              description: Type of sequencing used. Validated by vocabulary.
+              example: sanger
             reactionDate:
               type: string
               format: date
+            isCompleted:
+              type: boolean
+              description: Is the SeqBatch completed?
             storageRestriction:
               type: object
               properties:
