@@ -37,3 +37,7 @@ paths:
     $ref: 'sequencingFacility.yml#/paths/~1v1~1sequencing-facility'
   /v1/sequencing-facility/{Id}:
     $ref: 'sequencingFacility.yml#/paths/~1v1~1sequencing-facility~1{Id}'
+  /v1/seq-submission:
+    $ref: 'seqSubmission.yml#/paths/~1v1~1seq-submission'
+  /v1/seq-submission/{Id}:
+    $ref: 'seqSubmission.yml#/paths/~1v1~1seq-submission~1{Id}'
