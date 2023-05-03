@@ -147,7 +147,6 @@ paths:
         '404':
           description: seq-submission not found
 
-#verify info above
 components:
   schemas:
     SeqSubmission:
@@ -241,7 +240,7 @@ components:
                     - id
                   properties:
                     type:
-                      enum: [submitted-by]
+                      enum: [person]
                     id:
                       type: string
                       format: uuid
