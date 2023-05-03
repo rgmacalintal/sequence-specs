@@ -189,7 +189,6 @@ components:
           type: object
           required:
             - name
-            - sequencingType
           properties:
             group:
               type: string
