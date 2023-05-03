@@ -1,0 +1,248 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+info:
+  description: Sequence Submission schema
+  version: "1.0.0"
+  title: Sequence Submission schema
+  contact:
+    email: you@your-compay.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+paths:
+  /v1/seq-submission:
+    get:
+      tags:
+        - Sequence Submission
+      summary: get seq-submission
+      operationId: getSeqSubmissions
+      description: By passing in query string, get available seqSubmissions authorised
+      parameters:
+        - in: query
+          name: filter[rsql]
+          description: pass a optional search string for looking up the seqSubmissions
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: optional sort string, can have sort order such as descending denoted by "-"
+          schema:
+            type: string
+        - in: query
+          name: page[offset]
+          description: number of records to skip when paging
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: page[limit]
+          description: maximum number of records to return when paging
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: seqSubmissions satisfying the query restrictions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SeqSubmission'
+        '400':
+          description: bad input parameter
+        '404':
+          description: seqSubmission not found
+    post:
+      tags:
+        - Sequence Submission
+      summary: adds a seq-submission
+      operationId: addSeqSubmission
+      description: Adds a seq-submission
+      responses:
+        '201':
+          description: seq-submission created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: a seq-submission already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewSeqSubmission'
+        description: seq-submission to add
+  /v1/seq-submission/{Id}:
+    get:
+      tags:
+        - Sequence Submission
+      summary: Find seq-submission by ID
+      description: Returns a single seq-submission
+      operationId: getSeqSubmissionById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of seq-submission to return
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeqSubmission'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: seq-submission not found
+    patch:
+      tags:
+        - Sequence Submission
+      summary: update a seq-submission
+      operationId: updateSeqSubmission
+      description: update a seq-submission
+      parameters:
+        - name: Id
+          in: path
+          description: seq-submission id to patch
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: seq-submission updated
+        '400':
+          description: 'invalid input, object invalid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SeqSubmission'
+        description: seq-submission to update
+    delete:
+      tags:
+        - Sequence Submission
+      summary: delete a seq-submission
+      operationId: deleteSeqSubmission
+      description: delete a seq-submission
+      parameters:
+        - name: Id
+          in: path
+          description: seq-submission id to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: seq-submission marked as deleted
+        '400':
+          description: invalid ID supplied
+        '404':
+          description: seq-submission not found
+
+components:
+  schemas:
+    SeqSubmission:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+          allOf:
+           - $ref: '#/components/schemas/CommonSeqSubmission'
+           
+    NewSeqSubmission:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+           - $ref: '#/components/schemas/CommonSeqSubmission'
+                      
+    CommonSeqSubmission:
+      type: object
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          enum: [seq-submission]
+          description: The type of data being returned.
+        attributes:
+          description: Schema representing the SeqSubmission
+          type: object
+          required:
+            - name
+          properties:
+            group:
+              type: string
+              nullable: true
+              description: The group in which the seq-submission belongs to
+            name:
+              type: string
+            createdBy:
+              type: string      
+              readOnly: true
+              description: authenticated user who created the seq-submission
+            createdOn:              
+              type: string
+              format: date-time
+              readOnly: true
+              description: date and time when the seq-submission was created in ISO format
+              example: 1985-04-12T23:20:50.52Z
+        relationships:
+          type: object
+          properties:
+            seqBatch:
+              type: object
+              nullable: true
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [seq-batch]
+                    id:
+                      type: string
+                      format: uuid
+                      description: SeqBatch id
+                      example: 99e59304-b63d-42d8-ba03-4c1d415f5d5a
+            submittedBy:
+              type: object
+              nullable: true
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [person]
+                    id:
+                      type: string
+                      format: uuid
+                      description: submitted by id
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
