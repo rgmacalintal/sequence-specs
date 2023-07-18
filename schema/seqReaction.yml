@@ -211,6 +211,10 @@ components:
               type: string
               nullable: true
               description: A letter representing the row.
+            cellNumber:
+              type: integer
+              readOnly: true
+              description: Calculated field based on the wellColumn, wellRow and the seq-batch storageRestriction
         relationships:
           type: object
           properties:
