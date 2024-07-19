@@ -201,20 +201,6 @@ components:
               type: string
               nullable: true
               description: The group in which the seq-reaction belongs to
-            wellColumn:
-              type: integer
-              minimum: 1
-              maximum: 255
-              nullable: true
-              description: An integer representing the column. Starting at 1.
-            wellRow:
-              type: string
-              nullable: true
-              description: A letter representing the row.
-            cellNumber:
-              type: integer
-              readOnly: true
-              description: Calculated field based on the wellColumn, wellRow and the seq-batch storageRestriction
         relationships:
           type: object
           properties:
@@ -275,4 +261,23 @@ components:
                       format: uuid
                       description: PcrBatchItem id
                       example: 28c5bce6-dde7-449f-bafd-120b714be43f
+            storageUnitUsage:
+              type: object
+              nullable: true
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [storage-unit-usage]
+                    id:
+                      type: string
+                      format: uuid
+                      description: storageUnitUsage id (external relationship)
+                      example: 0190cb5d-0d0d-7046-8576-0e3693cd9a7b
 
