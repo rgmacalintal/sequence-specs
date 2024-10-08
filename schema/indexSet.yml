@@ -1,0 +1,237 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+info:
+  description: Index Set schema
+  version: "1.0.0"
+  title: Index Set schema
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+paths:
+  /v1/index-set:
+    get:
+      tags:
+        - Index Set
+      summary: get index set
+      operationId: getIndexSet
+      description: By passing in query string, user can get available index sets
+      parameters:
+        - in: query
+          name: filter[rsql]
+          description: pass an optional search string for looking up the index sets
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: optional sort string, can have sort order such as descending denoted by "-"
+          schema:
+            type: string
+        - in: query
+          name: page[offset]
+          description: number of records to skip when paging
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: page[limit]
+          description: maximum number of records to return when paging
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: index sets satifying the query restrictions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IndexSet'
+        '400':
+          description: bad input parameter
+        '404':
+          description: index sets not found
+    post:
+      tags:
+        - Index Set
+      summary: adds an index set
+      operationId: addIndexSet
+      description: Adds an index set
+      responses:
+        '201':
+          description: index set created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: An index set already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewIndexSet'
+        description: index set to add
+  /v1/index-set/{Id}:
+    get:
+      tags:
+        - Index Set
+      summary: Find index set by ID
+      description: Returns a single index set
+      operationId: getIndexSetById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of index set to return
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexSet'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: index set not found
+    patch:
+      tags:
+        - Index Set
+      summary: update an index set
+      operationId: updateIndexSet
+      description: update an index set
+      parameters:
+        - name: Id
+          in: path
+          description: index set id to patch
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: index set updated
+        '400':
+          description: 'invalid input, object invalid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IndexSet'
+        description: index set to update
+    delete:
+      tags:
+        - Index Set
+      summary: delete an index set
+      operationId: deleteIndexSet
+      description: delete an index set
+      parameters:
+        - name: Id
+          in: path
+          description: index set id to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: index set marked as deleted
+        '400':
+          description: invalid ID supplied
+        '404':
+          description: index set not found
+
+components:
+  schemas:
+    IndexSet:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+          allOf:
+           - $ref: '#/components/schemas/CommonIndexSet'
+           
+    NewIndexSet:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+           - $ref: '#/components/schemas/CommonIndexSet'
+                      
+    CommonIndexSet:
+      type: object
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          enum: [index-set]      
+          description: The type of data being returned.
+        attributes:
+          description: Schema representing the Index Set
+          type: object
+          required:
+            - name
+          properties:
+            createdBy:
+              type: string      
+              readOnly: true
+              description: Authenticated User who created the Index Set
+            createdOn:              
+              type: string
+              format: date-time                            
+              readOnly: true
+              description: Date and time when the Index Set was created in ISO format
+              example: 1985-04-12T23:20:50.52Z
+            group:
+              type: string
+              nullable: true
+              description: The group in which the index set belongs to
+            name:
+              type: string
+              description: Index Set name
+            forwardAdapter:
+              type: string
+              description: Forward Adapter for the Index Set
+            reverseAdapter:
+              type: string
+              description: Reverse Adapter for the Index Set
+        relationships:
+          type: object
+          properties:
+            ngsIndexes:
+              type: array
+              items:
+                type: object
+                nullable: true
+                required:
+                  - data
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - type
+                      - id
+                    properties:
+                      type:
+                        enum: [ngs-index]
+                      id:
+                        type: string
+                        format: uuid
+                        description: NGS Index id

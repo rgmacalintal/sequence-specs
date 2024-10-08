@@ -41,3 +41,7 @@ paths:
     $ref: 'seqSubmission.yml#/paths/~1v1~1seq-submission'
   /v1/seq-submission/{Id}:
     $ref: 'seqSubmission.yml#/paths/~1v1~1seq-submission~1{Id}'
+  /v1/index-set:
+    $ref: 'indexSet.yml#/paths/~1v1~1index-set'
+  /v1/index-set/{Id}:
+    $ref: 'indexSet.yml#/paths/~1v1~1index-set~1{Id}'
