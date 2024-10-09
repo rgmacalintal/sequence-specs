@@ -232,7 +232,7 @@ components:
               type: string
               description: Name of the company or lab supplying the NGS Index
             designedBy:
-              type: integer
+              type: string
               description: Name of the designer of the NGS Index
             stockConcentration:
               type: string
