@@ -1,0 +1,273 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+info:
+  description: NGS Index schema
+  version: "1.0.0"
+  title: NGS Index schema
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+paths:
+  /v1/ngs-index:
+    get:
+      tags:
+        - NGS Index
+      summary: get ngs-index
+      operationId: getNgsIndex
+      description: By passing in query string, user can get available ngs indexes
+      parameters:
+        - in: query
+          name: filter[rsql]
+          description: pass an optional search string for looking up the ngs indexes
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: optional sort string, can have sort order such as descending denoted by "-"
+          schema:
+            type: string
+        - in: query
+          name: page[offset]
+          description: number of records to skip when paging
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: page[limit]
+          description: maximum number of records to return when paging
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: NGS Indexes satifying the query restrictions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NgsIndex'
+        '400':
+          description: bad input parameter
+        '404':
+          description: ngs indexes not found
+    post:
+      tags:
+        - NGS Index
+      summary: adds an ngs-index
+      operationId: addNgsIndex
+      description: Adds an ngs-index
+      responses:
+        '201':
+          description: ngs-index created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: An ngs-index already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewNgsIndex'
+        description: ngs-index to add
+  /v1/ngs-index/{Id}:
+    get:
+      tags:
+        - NGS Index
+      summary: Find ngs-index by ID
+      description: Returns a single ngs-index
+      operationId: getNgsIndexById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of ngs-index to return
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NgsIndex'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: ngs-index not found
+    patch:
+      tags:
+        - NGS Index
+      summary: update an ngs-index
+      operationId: updateNgsIndex
+      description: update an ngs-index
+      parameters:
+        - name: Id
+          in: path
+          description: ngs-index id to patch
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ngs-index updated
+        '400':
+          description: 'invalid input, object invalid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NgsIndex'
+        description: ngs-index to update
+    delete:
+      tags:
+        - Ngs Index
+      summary: delete an ngs-index
+      operationId: deleteNgsIndex
+      description: delete an ngs-index
+      parameters:
+        - name: Id
+          in: path
+          description: ngs-index id to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ngs-index marked as deleted
+        '400':
+          description: invalid ID supplied
+        '404':
+          description: ngs-index not found
+
+components:
+  schemas:
+    NgsIndex:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+          allOf:
+           - $ref: '#/components/schemas/CommonNgsIndex'
+           
+    NewNgsIndex:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+           - $ref: '#/components/schemas/CommonNgsIndex'
+                      
+    CommonNgsIndex:
+      type: object
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          enum: [ngs-index]      
+          description: The type of data being returned.
+        attributes:
+          description: Schema representing the Ngs Index
+          type: object
+          required:
+            - name
+          properties:
+            createdBy:
+              type: string      
+              readOnly: true
+              description: Authenticated User who created the NGS Index
+            createdOn:              
+              type: string
+              format: date-time                            
+              readOnly: true
+              description: Date and time when the NGS Index was created in ISO format
+              example: 1985-04-12T23:20:50.52Z
+            name:
+              type: string
+              description: NGS Index name
+            lotNumber:
+              type: integer
+              description: Lot number for the created NGS Index
+            direction:
+              type: string
+              description: Forward or Reverse
+            purification:
+              type: string
+              description: The purification standard from the manufacturer
+            tmCalculated:
+              type: string
+              description: Calculated melting point (C°)
+            dateOrdered:
+              type: string
+              description: Date the NGS Index was ordered in YYYY-MM-DD format
+              example: 1985-04-12
+            dateDestroyed:
+              type: string
+              description: Date the NGS Index was destroyed in YYYY-MM-DD format
+              example: 1985-04-12
+            application:
+              type: string
+              description: The way that the NGS Index was used
+            reference:
+              type: string
+              description: Any reference regarding the NGS Index
+            supplier:
+              type: string
+              description: Name of the company or lab supplying the NGS Index
+            designedBy:
+              type: string
+              desciption: Name of the designer of the NGS Index
+            stockConcentration:
+              type: string
+              description: Stock concentration of the NGS Index
+            notes:
+              type: string
+              description: Any additional notes about the NGS Index
+            litReference:
+              type: string
+              description: Any reference in literature about the NGS Index
+            primerSequence:
+              type: string
+              description: Primer Sequence for the NGS Index
+            miSeqHiSeqIndexSequence:
+              type: string
+            miniSeqNextSeqIndexSequence:
+              type: string
+        relationships:
+          type: object
+          properties:
+            indexSet:
+              type: object
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [index-set]
+                    id:
+                      type: string
+                      format: uuid
+                      description: index-set id
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
