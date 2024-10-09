@@ -231,7 +231,7 @@ components:
             supplier:
               type: string
               description: Name of the company or lab supplying the NGS Index
-            definedBy:
+            designedBy:
               type: integer
               description: Name of the designer of the NGS Index
             stockConcentration:
