@@ -128,7 +128,7 @@ paths:
         description: ngs-index to update
     delete:
       tags:
-        - Ngs Index
+        - NGS Index
       summary: delete an ngs-index
       operationId: deleteNgsIndex
       description: delete an ngs-index
