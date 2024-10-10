@@ -45,3 +45,7 @@ paths:
     $ref: 'indexSet.yml#/paths/~1v1~1index-set'
   /v1/index-set/{Id}:
     $ref: 'indexSet.yml#/paths/~1v1~1index-set~1{Id}'
+  /v1/ngs-index:
+    $ref: 'ngsIndex.yml#/paths/~1v1~1ngs-index'
+  /v1/ngs-index/{Id}:
+    $ref: 'ngsIndex.yml#/paths/~1v1~1ngs-index~1{Id}'
