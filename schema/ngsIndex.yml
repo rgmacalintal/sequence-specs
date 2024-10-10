@@ -207,6 +207,7 @@ components:
               description: Lot number for the created NGS Index
             direction:
               type: string
+              enum: [I5, I7, FORWARD, REVERSE]
               description: Forward or Reverse
             purification:
               type: string
