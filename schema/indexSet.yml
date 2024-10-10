@@ -17,7 +17,7 @@ paths:
     get:
       tags:
         - Index Set
-      summary: get index set
+      summary: get index-set
       operationId: getIndexSet
       description: By passing in query string, user can get available index sets
       parameters:
@@ -47,7 +47,7 @@ paths:
             maximum: 50
       responses:
         '200':
-          description: index sets satifying the query restrictions
+          description: index-sets satifying the query restrictions
           content:
             application/json:
               schema:
@@ -57,20 +57,20 @@ paths:
         '400':
           description: bad input parameter
         '404':
-          description: index sets not found
+          description: index-sets not found
     post:
       tags:
         - Index Set
-      summary: adds an index set
+      summary: adds an index-set
       operationId: addIndexSet
-      description: Adds an index set
+      description: Adds an index-set
       responses:
         '201':
-          description: index set created
+          description: index-set created
         '400':
           description: 'invalid input, object invalid'
         '409':
-          description: An index set already exists
+          description: An index-set already exists
       requestBody:
         content:
           application/json:
@@ -81,13 +81,13 @@ paths:
     get:
       tags:
         - Index Set
-      summary: Find index set by ID
-      description: Returns a single index set
+      summary: Find index-set by ID
+      description: Returns a single index-set
       operationId: getIndexSetById
       parameters:
         - name: Id
           in: path
-          description: ID of index set to return
+          description: ID of index-set to return
           required: true
           schema:
             type: integer
@@ -101,17 +101,17 @@ paths:
         "400":
           description: Invalid ID supplied
         "404":
-          description: index set not found
+          description: index-set not found
     patch:
       tags:
         - Index Set
-      summary: update an index set
+      summary: update an index-set
       operationId: updateIndexSet
-      description: update an index set
+      description: update an index-set
       parameters:
         - name: Id
           in: path
-          description: index set id to patch
+          description: index-set id to patch
           required: true
           schema:
             type: integer
@@ -129,23 +129,23 @@ paths:
     delete:
       tags:
         - Index Set
-      summary: delete an index set
+      summary: delete an index-set
       operationId: deleteIndexSet
-      description: delete an index set
+      description: delete an index-set
       parameters:
         - name: Id
           in: path
-          description: index set id to delete
+          description: index-set id to delete
           required: true
           schema:
             type: integer
       responses:
         '200':
-          description: index set marked as deleted
+          description: index-set marked as deleted
         '400':
           description: invalid ID supplied
         '404':
-          description: index set not found
+          description: index-set not found
 
 components:
   schemas:
@@ -184,7 +184,7 @@ components:
           enum: [index-set]      
           description: The type of data being returned.
         attributes:
-          description: Schema representing the Index Set
+          description: Schema representing the index-set
           type: object
           required:
             - name
@@ -192,26 +192,26 @@ components:
             createdBy:
               type: string      
               readOnly: true
-              description: Authenticated User who created the Index Set
+              description: Authenticated User who created the index-set
             createdOn:              
               type: string
               format: date-time                            
               readOnly: true
-              description: Date and time when the Index Set was created in ISO format
+              description: Date and time when the index-set was created in ISO format
               example: 1985-04-12T23:20:50.52Z
             group:
               type: string
               nullable: true
-              description: The group in which the index set belongs to
+              description: The group in which the index-set belongs to
             name:
               type: string
-              description: Index Set name
+              description: index-set name
             forwardAdapter:
               type: string
-              description: Forward Adapter for the Index Set
+              description: Forward Adapter for the index-set
             reverseAdapter:
               type: string
-              description: Reverse Adapter for the Index Set
+              description: Reverse Adapter for the index-set
         relationships:
           type: object
           properties:

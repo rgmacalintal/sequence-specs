@@ -1,0 +1,245 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+info:
+  description: Thermocylcer Profile schema
+  version: "1.0.0"
+  title: Thermocylcer Profile schema
+  contact:
+    email: you@your-compay.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+
+paths:
+  /v1/thermocycler-profile:
+    get:
+      tags:
+        - Thermocylcer Profile
+      summary: get thermocycler-profile
+      operationId: getThermocyclerProfiles
+      description: By passing in query string, get available thermocyclerProfiles authorised
+      parameters:
+        - in: query
+          name: filter[rsql]
+          description: pass a optional search string for looking up the thermocyclerProfiles
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: optional sort string, can have sort order such as descending denoted by "-"
+          schema:
+            type: string
+        - in: query
+          name: page[offset]
+          description: number of records to skip when paging
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: page[limit]
+          description: maximum number of records to return when paging
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: thermocyclerProfiles satisfying the query restrictions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ThermocyclerProfile'
+        '400':
+          description: bad input parameter
+        '404':
+          description: thermocyclerProfiles not found
+    post:
+      tags:
+        - Thermocycler Profile
+      summary: adds a thermocycler-profile
+      operationId: addThermocyclerProfile
+      description: Adds a thermocycler-profile
+      responses:
+        '201':
+          description: thermocycler-profile created
+        '400':
+          description: 'invalid input, object invalid'
+        '409':
+          description: a thermocycler-profile already exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewThermocyclerProfile'
+        description: thermocycler-profile to add
+  /v1/thermocycler-profile/{Id}:
+    get:
+      tags:
+        - Thermocycler Profile
+      summary: Find thermocycler-profile by ID
+      description: Returns a single thermocycler-profile
+      operationId: getThermocyclerProfileById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of thermocycler-profile to return
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThermocyclerProfile'
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: thermocycler-profile not found
+    patch:
+      tags:
+        - Thermocycler Profile
+      summary: update a thermocycler-profile
+      operationId: updateThermocyclerProfile
+      description: update a thermocycler-profile
+      parameters:
+        - name: Id
+          in: path
+          description: thermocycler-profile id to patch
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: thermocycler-profile updated
+        '400':
+          description: 'invalid input, object invalid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ThermocyclerProfile'
+        description: thermocycler-profile to update
+    delete:
+      tags:
+        - Thermocycler Profile
+      summary: delete a thermocycler-profile
+      operationId: deleteThermocyclerProfile
+      description: delete a thermocycler-profile
+      parameters:
+        - name: Id
+          in: path
+          description: thermocycler-profile id to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: thermocycler-profile marked as deleted
+        '400':
+          description: invalid ID supplied
+        '404':
+          description: thermocycler-profile not found
+
+components:
+  schemas:
+    ThermocyclerProfile:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+          allOf:
+           - $ref: '#/components/schemas/CommonThermocyclerProfile'
+
+    NewThermocyclerProfile:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+           - $ref: '#/components/schemas/CommonThermocyclerProfile'
+
+    CommonThermocyclerProfile:
+      type: object
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          enum: [thermocycler-profile]
+          description: The type of data being returned.
+        attributes:
+          description: Schema representing the ThermocyclerProfile
+          type: object
+          required:
+            - name
+          properties:
+            createdBy:
+              type: string      
+              readOnly: true
+              description: authenticated user who created the thermocycler-profile
+            createdOn:
+              type: string
+              format: date-time
+              readOnly: true
+              description: date and time when the thermocycler-profile was created in ISO format
+              example: 1985-04-12T23:20:50.52Z
+            group:
+              type: string
+              nullable: true
+              description: The group in which the thermocycler-profile belongs to
+            name:
+              type: string
+              description: Name of the thermocycler-profile
+            application:
+              type: string
+              description: The way that the thermocycler-profile was used
+            cycles:
+              type: string
+              description: Amplification cycle of the thermocycler-profile
+            lastModified:
+              type: string
+              description: Date and time the thermocycler-profile was last modified in YYYY-MM-DD HH:MM:SS format
+            steps:
+              type: array
+              description: List of steps regarding the thermocycler-profile
+              items:
+                type: string
+                nullable: true
+        relationships:
+          type: object
+          properties:
+            region:
+              type: object
+              nullable: true
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [region]
+                    id:
+                      type: string
+                      format: uuid
+                      description: Region id
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
