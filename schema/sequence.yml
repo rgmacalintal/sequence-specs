@@ -49,3 +49,7 @@ paths:
     $ref: 'ngsIndex.yml#/paths/~1v1~1ngs-index'
   /v1/ngs-index/{Id}:
     $ref: 'ngsIndex.yml#/paths/~1v1~1ngs-index~1{Id}'
+  /v1/thermocycler-profile:
+    $ref: 'thermocyclerProfile.yml#/paths/~1v1~1thermocycler-profile'
+  /v1/thermocycler-profile/{Id}:
+    $ref: 'thermocyclerProfile.yml#/paths/~1v1~1thermocycler-profile~1{Id}'
