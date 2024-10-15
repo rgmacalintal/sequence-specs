@@ -16,7 +16,7 @@ paths:
   /v1/thermocycler-profile:
     get:
       tags:
-        - Thermocylcer Profile
+        - Thermocycler Profile
       summary: get thermocycler-profile
       operationId: getThermocyclerProfiles
       description: By passing in query string, get available thermocyclerProfiles authorised
